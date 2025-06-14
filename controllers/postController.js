@@ -121,7 +121,10 @@ const getAllPostsByPagination = async (req, res, next) => {
         const sort = {[sortField]: sortOrder};
 
         // Query
-        const posts = await BlogPostModel.find(filter).sort(sort).skip(skip).limit(limit).populate('author');
+        const posts = await BlogPostModel.find(filter).sort(sort).skip(skip).limit(limit).populate({
+            path: 'author',
+            select: '-password',
+        });
         const total = await BlogPostModel.countDocuments(filter);
 
         res.json(
