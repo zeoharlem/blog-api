@@ -60,9 +60,12 @@ const getMyBlogPosts = async (req, res, next) => {
 const getPostDetailsById = async (req, res, next) => {
     const postId = req.params.id
     try {
-        const post = await BlogPostModel.findById({_id: postId})
-            .where({state: 'published'})
-            .populate('author')
+        const post = await BlogPostModel.findById(postId)
+            //.where({state: 'published'})
+            .populate({
+                path: 'author',
+                select: '-password',
+            })
 
         if (!post) {
             return res.status(StatusCodes.BAD_REQUEST).json({
